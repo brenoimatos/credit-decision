@@ -28,7 +28,7 @@ const labelStyle = {
     position: "relative",
     fontSize: 12,
     display: "flex",
-    flexDirection: "column",  // Mudança aqui para colocar os elementos em coluna
+    flexDirection: "column",
     justifyContent: "center",
     alignItems: "center",
     height: "100%"
@@ -140,8 +140,8 @@ function InnerSelect({ value, nodeId, options }) {
           style={inputStyle}
         />
       </div>
-      <Handle id="b" style={handleStyle} type="source" position={Position.Right} />
-      <Handle id="c" style={handleStyle} type="source" position={Position.Bottom} />
+      <Handle id="false" style={handleStyle} type="source" position={Position.Right} />
+      <Handle id="true" style={handleStyle} type="source" position={Position.Bottom} />
     </div>
   );
 }
