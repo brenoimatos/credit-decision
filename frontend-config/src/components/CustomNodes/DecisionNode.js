@@ -1,11 +1,13 @@
 import { Handle, Position, useStoreApi, useReactFlow } from 'reactflow';
+import { attributeOptions, operatorOptions } from '../../utils/constants';
+import { useEffect } from 'react';
 
 const nodeStyle = {
   width: 76,
   height: 76
 };
 
-const diamondStyle = {
+const decisionStyle = {
   width: 60,
   height: 60,
   transform: "translate(-50%, -50%) rotate(45deg)",
@@ -38,71 +40,38 @@ const handleStyle = {
   zIndex: 1
 };
 
-const options1 = [
-    {
-      value: 'age',
-      label: 'Age',
-    },
-    {
-      value: 'income',
-      label: 'Income',
-    },
-  ];
+const updateNodeData = (nodeId, fieldName, fieldValue, setNodes, store) => {
+  const { nodeInternals } = store.getState();
+  setNodes(
+    Array.from(nodeInternals.values()).map((node) => {
+      if (node.id === nodeId) {
+        node.data = {
+          ...node.data,
+          [fieldName]: fieldValue,
+        };
+      }
+      return node;
+    })
+  );
+};
 
-const options2 = [
-  {
-    value: '=',
-    label: '=',
-  },
-  {
-    value: '!=',
-    label: '!=',
-  },
-  {
-    value: '>',
-    label: '>',
-  },
-  {
-    value: '>=',
-    label: '>=',
-  },
-  {
-    value: '<',
-    label: '<',
-  },
-  {
-    value: '<=',
-    label: '<=',
-  },
-];
   
-function InnerSelect({ value, nodeId, options }) {
+function InnerSelect({ value, nodeId, options, fieldName}) {
     const { setNodes } = useReactFlow();
     const store = useStoreApi();
   
     const onChange = (evt) => {
-      const { nodeInternals } = store.getState();
-      setNodes(
-        Array.from(nodeInternals.values()).map((node) => {
-          if (node.id === nodeId) {
-            node.data = {
-              ...node.data,
-              selected: evt.target.value,
-            };
-          }
-          return node;
-        })
-      );
+      updateNodeData(nodeId, fieldName, evt.target.value, setNodes, store);
     };
   
     return (
       <select className="nodrag" onChange={onChange} value={value}>
-        {options.map((option) => (
-          <option key={option.value} value={option.value}>
-            {option.label}
-          </option>
-        ))}
-      </select>
+  {options.map((option) => (
+    <option key={option.value} value={option.value}>
+      {option.label}
+    </option>
+  ))}
+</select>
     );
   }
   
@@ -121,23 +90,32 @@ function InnerSelect({ value, nodeId, options }) {
     );
   }
   
-  function DiamondNode({ id, data }) {
+  function DecisionNode({ id, data }) {
   const { setNodes } = useReactFlow();
   const store = useStoreApi();
+  useEffect(() => {
+    if (!data.attribute) {
+      updateNodeData(id, 'attribute', attributeOptions[0].value, setNodes, store);
+    }
+    if (!data.operator) {
+      updateNodeData(id, 'operator', operatorOptions[0].value, setNodes, store);
+    }
+  }, [id, setNodes, store, data]);
 
   return (
     <div style={nodeStyle}>
       <Handle id="a" style={handleStyle} type="target" position={Position.Top} />
-      <div style={diamondStyle} />
+      <div style={decisionStyle} />
       <div style={labelStyle}>
-        <InnerSelect value={data.selected1} nodeId={id} options={options1} />
-        <InnerSelect value={data.selected2} nodeId={id} options={options2} />
+        <InnerSelect value={data.attribute} nodeId={id} options={attributeOptions} fieldName="attribute" />
+        <InnerSelect value={data.operator} nodeId={id} options={operatorOptions} fieldName="operator" />
         <input
           type="number"
-          value={data.inputValue}
+          value={data.inputValue || ""}
           onChange={(e) => onInputChange(e, id, setNodes, store)}
           className="nodrag"
           style={inputStyle}
+          placeholder="Value"
         />
       </div>
       <Handle id="false" style={handleStyle} type="source" position={Position.Right} />
@@ -146,4 +124,4 @@ function InnerSelect({ value, nodeId, options }) {
   );
 }
 
-export default DiamondNode;
+export default DecisionNode;

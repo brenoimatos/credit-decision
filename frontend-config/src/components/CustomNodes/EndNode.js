@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useCallback} from 'react';
 import { Handle, Position, useReactFlow, useStoreApi } from 'reactflow';
 
 const ovalStyle = {
@@ -13,26 +13,37 @@ const ovalStyle = {
   border: '1px solid #333'
 };
 
+
+
 const EndNode = ({ id }) => {
   const { setNodes } = useReactFlow();
   const store = useStoreApi();
   const [selected, setSelected] = useState('True');
 
-  const handleChange = (evt) => {
-    setSelected(evt.target.value);
+  const updateNodeData = useCallback((selectedValue) => {
     const { nodeInternals } = store.getState();
     setNodes(
       Array.from(nodeInternals.values()).map((node) => {
         if (node.id === id) {
           node.data = {
             ...node.data,
-            selected: evt.target.value,
+            selected: selectedValue,
           };
         }
         return node;
       })
     );
+  }, [id, setNodes, store]);
+  
+
+  const handleChange = (evt) => {
+    setSelected(evt.target.value);
+    updateNodeData(evt.target.value);
   };
+  
+  useEffect(() => {
+    updateNodeData(selected);
+  }, [selected, updateNodeData]);
 
   return (
     <div style={ovalStyle}>

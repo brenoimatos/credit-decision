@@ -1,6 +1,6 @@
 {
-  "short_name": "React App",
-  "name": "Create React App Sample",
+  "short_name": "Policy Changer",
+  "name": "Change the credit policy.",
   "icons": [
     {
       "src": "favicon.ico",

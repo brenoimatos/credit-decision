@@ -1,17 +1,17 @@
-import React, { useCallback, useState, useRef } from 'react';
+import React, { useCallback, useState, useRef, useEffect } from 'react';
 import ReactFlow, { ReactFlowProvider, addEdge, applyEdgeChanges, applyNodeChanges } from 'reactflow';
 import 'reactflow/dist/style.css';
-import DiamondNode from "./components/CustomNodes/DiamondNode";
-import { initialEdges, initialNodes } from './utils/constants';
+import DecisionNode from "./components/CustomNodes/DecisionNode";
 import Sidebar from './components/Sidebar';
 import StartNode from './components/CustomNodes/StartNode';
 import EndNode from './components/CustomNodes/EndNode';
+import { getPolicy, patchPolicy} from './api/policy';
 
 let id = 0;
 const getId = () => `dndnode_${id++}`;
 
 const nodeTypes = {
-    diamond: DiamondNode,
+    decision: DecisionNode,
     start: StartNode,
     end: EndNode
   };
@@ -19,8 +19,26 @@ const nodeTypes = {
 
 const BasicFlow = () => {
     const reactFlowWrapper = useRef(null);
-    const [nodes, setNodes] = useState(initialNodes);
-    const [edges, setEdges] = useState(initialEdges);
+    const [nodes, setNodes] = useState();
+    const [edges, setEdges] = useState();
+
+    useEffect(() => {
+      const fetchPolicy = async () => {
+          const policyData = await getPolicy();
+          if (policyData) {
+              setNodes(policyData.nodes);
+              setEdges(policyData.edges);
+          }
+      };
+
+      fetchPolicy();
+  }, []);
+
+    const printGraphInfo = async () => {
+      console.log("Nodes: ", nodes);
+      console.log("Edges: ", edges);
+      patchPolicy(nodes, edges)
+  };
   
     const onNodesChange = useCallback(
       (changes) => setNodes((nds) => applyNodeChanges(changes, nds)),
@@ -74,6 +92,7 @@ const BasicFlow = () => {
         <ReactFlowProvider>
           <Sidebar />
           <div className="reactflow-wrapper" ref={reactFlowWrapper}>
+            <button onClick={printGraphInfo}>Print Graph Info</button>
             <ReactFlow
               nodes={nodes}
               edges={edges}

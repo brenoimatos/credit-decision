@@ -12,7 +12,7 @@ const Sidebar = () => {
       <div className="dndnode input" onDragStart={(event) => onDragStart(event, 'start')} draggable>
         Start Node
       </div>
-      <div className="dndnode diamond" onDragStart={(event) => onDragStart(event, 'diamond')} draggable>
+      <div className="dndnode decision" onDragStart={(event) => onDragStart(event, 'decision')} draggable>
         Decision Node
       </div>
       <div className="dndnode output" onDragStart={(event) => onDragStart(event, 'end')} draggable>
