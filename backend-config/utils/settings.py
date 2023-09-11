@@ -7,6 +7,7 @@ class Settings(BaseSettings):
     PORT: int
     DB_NAME: str
     DB_URL: str
+    PROJECT_NAME: str
 
 
 config = Settings()

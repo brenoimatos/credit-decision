@@ -6,7 +6,7 @@ from utils.settings import config
 from controllers.policy_controller import router as PolicyRouter
 from starlette.middleware.cors import CORSMiddleware
 
-app = FastAPI()
+app = FastAPI(title=config.PROJECT_NAME)
 
 @app.on_event("startup")
 async def startup_db_client():
