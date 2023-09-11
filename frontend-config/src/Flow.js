@@ -19,8 +19,8 @@ const nodeTypes = {
 
 const BasicFlow = () => {
     const reactFlowWrapper = useRef(null);
-    const [nodes, setNodes] = useState();
-    const [edges, setEdges] = useState();
+    const [nodes, setNodes] = useState([]);
+    const [edges, setEdges] = useState([]);
 
     useEffect(() => {
       const fetchPolicy = async () => {
