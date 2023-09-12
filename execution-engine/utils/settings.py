@@ -8,6 +8,7 @@ class Settings(BaseSettings):
     DB_NAME: str
     DB_URL: str
     PROJECT_NAME: str
+    POLICY_API: str
 
 
 config = Settings()

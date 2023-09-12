@@ -1,6 +1,7 @@
 certifi==2023.7.22
 dnspython==2.4.2
 fastapi==0.103.1
+httpx==0.25.0
 motor==3.3.1
 pydantic==2.3.0
 pydantic-settings==2.0.3
