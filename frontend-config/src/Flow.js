@@ -90,7 +90,14 @@ const BasicFlow = () => {
     },
     [currentId, reactFlowInstance]
   )
-
+  // This is for to be able to update the True or False labels in decision node after connecting.
+  const nodes_with_edges = nodes.map((node) => ({
+    ...node,
+    data: {
+      ...node.data,
+      edges: edges,
+    },
+  }))
   return (
     <div className="dndflow">
       <ReactFlowProvider>
@@ -98,7 +105,7 @@ const BasicFlow = () => {
         <div className="reactflow-wrapper" ref={reactFlowWrapper}>
           <button onClick={() => patchPolicy(nodes, edges)}>Save Policy</button>
           <ReactFlow
-            nodes={nodes}
+            nodes={nodes_with_edges}
             edges={edges}
             onNodesChange={onNodesChange}
             onEdgesChange={onEdgesChange}

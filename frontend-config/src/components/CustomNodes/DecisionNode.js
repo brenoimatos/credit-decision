@@ -19,6 +19,22 @@ const decisionStyle = {
   borderRadius: 2,
 }
 
+const handleLabelRightStyle = {
+  position: 'absolute',
+  right: '-55px',
+  top: '50%',
+  transform: 'translateY(-50%)',
+  fontSize: '15px',
+}
+
+const handleLabelBottomStyle = {
+  position: 'absolute',
+  bottom: '-40px',
+  left: '50%',
+  transform: 'translateX(-50%)',
+  fontSize: '15px',
+}
+
 const inputStyle = {
   width: '60px',
   height: '10px',
@@ -26,9 +42,7 @@ const inputStyle = {
 }
 
 const labelStyle = {
-  zIndex: 10,
   position: 'relative',
-  fontSize: 12,
   display: 'flex',
   flexDirection: 'column',
   justifyContent: 'center',
@@ -106,6 +120,12 @@ function DecisionNode({ id, data }) {
       updateNodeData(id, 'operator', operatorOptions[0].value, setNodes, store)
     }
   }, [id, setNodes, store, data])
+  const isHandleRightConnected = data.edges.some(
+    (edge) => edge.source === id && edge.sourceHandle === 'false'
+  )
+  const isHandleBottomConnected = data.edges.some(
+    (edge) => edge.source === id && edge.sourceHandle === 'true'
+  )
 
   return (
     <div style={nodeStyle}>
@@ -144,12 +164,18 @@ function DecisionNode({ id, data }) {
         type="source"
         position={Position.Right}
       />
+      {!isHandleRightConnected && (
+        <div style={handleLabelRightStyle}>False</div>
+      )}
       <Handle
         id="true"
         style={handleStyle}
         type="source"
         position={Position.Bottom}
       />
+      {!isHandleBottomConnected && (
+        <div style={handleLabelBottomStyle}>True</div>
+      )}
     </div>
   )
 }
