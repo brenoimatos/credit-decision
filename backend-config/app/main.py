@@ -11,7 +11,6 @@ app = FastAPI(title=config.PROJECT_NAME)
 @app.on_event("startup")
 async def startup_db_client():
     app.mongodb_client = AsyncIOMotorClient(config.DB_URL, tlsCAFile=certifi.where())
-    print(config.DB_URL)
     app.mongodb = app.mongodb_client[config.DB_NAME]
 
 @app.on_event("shutdown")
