@@ -1,5 +1,5 @@
-import React from 'react';
-import { Handle, Position } from 'reactflow';
+import React from 'react'
+import { Handle, Position } from 'reactflow'
 
 const ovalStyle = {
   width: '100px',
@@ -9,8 +9,8 @@ const ovalStyle = {
   display: 'flex',
   justifyContent: 'center',
   alignItems: 'center',
-  border: '1px solid #333'
-};
+  border: '1px solid #333',
+}
 
 const StartNode = () => {
   return (
@@ -18,7 +18,7 @@ const StartNode = () => {
       <Handle type="source" position={Position.Bottom} />
       Start
     </div>
-  );
-};
+  )
+}
 
-export default StartNode;
+export default StartNode
