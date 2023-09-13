@@ -24,24 +24,22 @@ const BasicFlow = () => {
   const [edges, setEdges] = useState([])
   const [currentId, setCurrentId] = useState(0)
 
-  useEffect(() => {
-    const fetchPolicy = async () => {
-      const policyData = await getPolicy()
-      if (policyData) {
-        setNodes(policyData.nodes)
-        setEdges(policyData.edges)
+  const fetchPolicyData = async () => {
+    const policyData = await getPolicy()
+    if (policyData) {
+      setNodes(policyData.nodes)
+      setEdges(policyData.edges)
 
-        const maxId = Math.max(
-          ...policyData.nodes.map((node) =>
-            parseInt(node.id.split('_')[1], 10)
-          ),
-          0
-        )
-        setCurrentId(maxId + 1)
-      }
+      const maxId = Math.max(
+        ...policyData.nodes.map((node) => parseInt(node.id.split('_')[1], 10)),
+        0
+      )
+      setCurrentId(maxId + 1)
     }
+  }
 
-    fetchPolicy()
+  useEffect(() => {
+    fetchPolicyData()
   }, [])
 
   const onNodesChange = useCallback(

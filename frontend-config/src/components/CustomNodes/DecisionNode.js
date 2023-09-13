@@ -3,15 +3,15 @@ import { attributeOptions, operatorOptions } from '../../utils/constants'
 import { useEffect } from 'react'
 
 const nodeStyle = {
-  width: 76,
-  height: 76,
+  width: 105,
+  height: 105,
 }
 
 const decisionStyle = {
-  width: 60,
-  height: 60,
+  width: 80,
+  height: 80,
   transform: 'translate(-50%, -50%) rotate(45deg)',
-  background: 'white',
+  background: '#eefc5e',
   position: 'absolute',
   left: '50%',
   top: '50%',

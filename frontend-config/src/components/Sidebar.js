@@ -12,7 +12,7 @@ const Sidebar = () => {
         You can drag these nodes to the pane on the right.
       </div>
       <div
-        className="dndnode input"
+        className="dndnode start"
         onDragStart={(event) => onDragStart(event, 'start')}
         draggable
       >
@@ -26,7 +26,7 @@ const Sidebar = () => {
         Decision Node
       </div>
       <div
-        className="dndnode output"
+        className="dndnode end"
         onDragStart={(event) => onDragStart(event, 'end')}
         draggable
       >
