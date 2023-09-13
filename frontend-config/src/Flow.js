@@ -23,6 +23,7 @@ const BasicFlow = () => {
   const [nodes, setNodes] = useState([])
   const [edges, setEdges] = useState([])
   const [currentId, setCurrentId] = useState(0)
+  const [reactFlowInstance, setReactFlowInstance] = useState(null)
 
   const fetchPolicyData = async () => {
     const policyData = await getPolicy()
@@ -72,10 +73,11 @@ const BasicFlow = () => {
 
       const reactFlowBounds = reactFlowWrapper.current.getBoundingClientRect()
       const type = event.dataTransfer.getData('application/reactflow')
-      const position = {
-        x: event.clientX - reactFlowBounds.left,
-        y: event.clientY - reactFlowBounds.top,
-      }
+
+      const position = reactFlowInstance.project({
+        x: event.clientX - reactFlowBounds.left - 40,
+        y: event.clientY - reactFlowBounds.top - 40,
+      })
 
       const newNode = {
         id: newId,
@@ -86,7 +88,7 @@ const BasicFlow = () => {
 
       setNodes((nds) => nds.concat(newNode))
     },
-    [currentId]
+    [currentId, reactFlowInstance]
   )
 
   return (
@@ -102,6 +104,7 @@ const BasicFlow = () => {
             onEdgesChange={onEdgesChange}
             onConnect={onConnect}
             nodeTypes={nodeTypes}
+            onInit={setReactFlowInstance}
             onDragOver={onDragOver}
             onDrop={onDrop}
             fitView
