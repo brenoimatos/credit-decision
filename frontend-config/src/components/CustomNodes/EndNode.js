@@ -13,10 +13,10 @@ const ovalStyle = {
   border: '1px solid #333',
 }
 
-const EndNode = ({ id }) => {
+const EndNode = ({ id, data }) => {
   const { setNodes } = useReactFlow()
   const store = useStoreApi()
-  const [selected, setSelected] = useState('True')
+  const [selected, setSelected] = useState(data.selected)
 
   const updateNodeData = useCallback(
     (selectedValue) => {
@@ -51,8 +51,8 @@ const EndNode = ({ id }) => {
       <Handle id="b" type="target" position={Position.Left} />
       End
       <select onChange={handleChange} value={selected}>
-        <option value="True">True</option>
-        <option value="False">False</option>
+        <option value={true}>True</option>
+        <option value={false}>False</option>
       </select>
     </div>
   )
