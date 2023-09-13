@@ -7,8 +7,6 @@ import StartNode from './components/CustomNodes/StartNode';
 import EndNode from './components/CustomNodes/EndNode';
 import { getPolicy, patchPolicy} from './api/policy';
 
-let id = 0;
-const getId = () => `dndnode_${id++}`;
 
 const nodeTypes = {
     decision: DecisionNode,
@@ -16,11 +14,11 @@ const nodeTypes = {
     end: EndNode
   };
 
-
 const BasicFlow = () => {
     const reactFlowWrapper = useRef(null);
     const [nodes, setNodes] = useState([]);
     const [edges, setEdges] = useState([]);
+    const [currentId, setCurrentId] = useState(0);
 
     useEffect(() => {
       const fetchPolicy = async () => {
@@ -28,17 +26,14 @@ const BasicFlow = () => {
           if (policyData) {
               setNodes(policyData.nodes);
               setEdges(policyData.edges);
+
+              const maxId = Math.max(...policyData.nodes.map(node => parseInt(node.id.split('_')[1], 10)), 0);
+              setCurrentId(maxId + 1);
           }
       };
 
       fetchPolicy();
   }, []);
-
-    const printGraphInfo = async () => {
-      console.log("Nodes: ", nodes);
-      console.log("Edges: ", edges);
-      patchPolicy(nodes, edges)
-  };
   
     const onNodesChange = useCallback(
       (changes) => setNodes((nds) => applyNodeChanges(changes, nds)),
@@ -63,10 +58,15 @@ const BasicFlow = () => {
       event.preventDefault();
       event.dataTransfer.dropEffect = 'move';
     }, []);
-  
+
     const onDrop = useCallback(
       (event) => {
         event.preventDefault();
+        const getId = () => {
+          const newId = `dndnode_${currentId}`;
+          setCurrentId(currentId + 1);
+          return newId;
+        };
   
         const reactFlowBounds = reactFlowWrapper.current.getBoundingClientRect();
         const type = event.dataTransfer.getData('application/reactflow');
@@ -74,7 +74,6 @@ const BasicFlow = () => {
           x: event.clientX - reactFlowBounds.left,
           y: event.clientY - reactFlowBounds.top,
         };
-  
         const newNode = {
           id: getId(),
           type,
@@ -84,7 +83,7 @@ const BasicFlow = () => {
   
         setNodes((nds) => nds.concat(newNode));
       },
-      [reactFlowWrapper, setNodes]
+      [reactFlowWrapper, setNodes, currentId]
     );
   
     return (
@@ -92,7 +91,7 @@ const BasicFlow = () => {
         <ReactFlowProvider>
           <Sidebar />
           <div className="reactflow-wrapper" ref={reactFlowWrapper}>
-            <button onClick={printGraphInfo}>Print Graph Info</button>
+            <button onClick={() => patchPolicy(nodes, edges)}>Save Policy</button>
             <ReactFlow
               nodes={nodes}
               edges={edges}
