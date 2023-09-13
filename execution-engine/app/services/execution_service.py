@@ -25,18 +25,11 @@ class ExecutionService:
         edge_from_start = next(edge for edge in edges if edge['source'] == start_node['id'])
         return edge_from_start['target']
 
-    
     def _build_decision_tree(self, node_id: str, nodes: List[Dict], edges: List[Dict]):
         node = next(node for node in nodes if node['id'] == node_id)
         node_type = node['data']['label']
         
         if node_type == 'decision node':
-            # Build the decision node
-            attribute = node['data']['attribute']
-            operator = node['data']['operator']
-            value = node['data']['inputValue']
-            
-            # Find the next nodes for True and False
             true_node_id = next((edge['target'] for edge in edges if edge['source'] == node_id and edge.get('label') == 'True'), None)
             false_node_id = next((edge['target'] for edge in edges if edge['source'] == node_id and edge.get('label') == 'False'), None)
             
@@ -44,9 +37,9 @@ class ExecutionService:
             false_subtree = self._build_decision_tree(false_node_id, nodes, edges) if false_node_id else None
             
             return {
-                'attribute': attribute,
-                'operator': operator,
-                'value': value,
+                'attribute': node['data']['attribute'],
+                'operator': node['data']['operator'],
+                'value': node['data']['inputValue'],
                 'true': true_subtree,
                 'false': false_subtree
             }
