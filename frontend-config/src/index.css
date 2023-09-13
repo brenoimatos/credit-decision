@@ -73,3 +73,17 @@ code {
     max-width: 250px;
   }
 }
+
+.react-flow__edge-text {
+  font-size: 15px !important;
+}
+
+.react-flow__handle {
+  transition: all 0.1s ease;
+}
+
+.react-flow__handle:hover {
+  background: radial-gradient(circle, #ff0, #f06);
+  width: 20px !important;
+  height: 20px !important;
+}
