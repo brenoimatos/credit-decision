@@ -10,7 +10,7 @@ import DecisionNode from './components/CustomNodes/DecisionNode'
 import Sidebar from './components/Sidebar'
 import StartNode from './components/CustomNodes/StartNode'
 import EndNode from './components/CustomNodes/EndNode'
-import { getPolicy, patchPolicy } from './api/policy'
+import { getPolicy } from './api/policy'
 
 const nodeTypes = {
   decision: DecisionNode,
@@ -24,18 +24,20 @@ const BasicFlow = () => {
   const [edges, setEdges] = useState([])
   const [currentId, setCurrentId] = useState(0)
   const [reactFlowInstance, setReactFlowInstance] = useState(null)
+  const [message, setMessage] = useState(null)
 
   const fetchPolicyData = async () => {
     const policyData = await getPolicy()
     if (policyData) {
       setNodes(policyData.nodes)
       setEdges(policyData.edges)
-
       const maxId = Math.max(
         ...policyData.nodes.map((node) => parseInt(node.id.split('_')[1], 10)),
         0
       )
       setCurrentId(maxId + 1)
+    } else {
+      setMessage('Failed to fetch policy')
     }
   }
 
@@ -101,9 +103,23 @@ const BasicFlow = () => {
   return (
     <div className="dndflow">
       <ReactFlowProvider>
-        <Sidebar />
+        <Sidebar nodes={nodes} edges={edges} />
         <div className="reactflow-wrapper" ref={reactFlowWrapper}>
-          <button onClick={() => patchPolicy(nodes, edges)}>Save Policy</button>
+          {message && (
+            <div
+              style={{
+                display: 'inline-block',
+                padding: '10px',
+                backgroundColor: '#f44336', // red for error
+                color: 'white',
+                borderRadius: '5px',
+                marginTop: '20px',
+                textAlign: 'center',
+              }}
+            >
+              {message}
+            </div>
+          )}
           <ReactFlow
             nodes={nodes_with_edges}
             edges={edges}

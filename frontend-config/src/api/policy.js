@@ -1,41 +1,42 @@
-import axios from 'axios';
+import axios from 'axios'
 
-export const savePolicy = async (nodes, edges) => {
+const BASE_URL = 'http://localhost:9000/policy'
+const POLICY_ID = '64fe4c4059f7f891749600c2'
+
+export const createPolicy = async (nodes, edges) => {
   const policyData = {
-    name: "nomeDaPolicy",
+    name: 'PolicyName',
     nodes: nodes,
-    edges: edges
-  };
-  try {
-    const response = await axios.post('http://localhost:9000/policy/', policyData);
-    
-    console.log('Resposta do servidor:', response.data);
-  } catch (error) {
-    console.log('Ocorreu um erro ao salvar a política:', error);
+    edges: edges,
   }
-};
+  try {
+    const response = await axios.post(`${BASE_URL}/`, policyData)
+    return { success: true, data: response.data }
+  } catch (error) {
+    return { success: false, error: error }
+  }
+}
 
 export const getPolicy = async () => {
-    try {
-      const response = await axios.get('http://localhost:9000/policy/64fe4c4059f7f891749600c2');
-      return response.data;
-    } catch (error) {
-      console.log('Ocorreu um erro ao buscar os dados:', error);
-      return null;
-    }
-};
+  try {
+    const response = await axios.get(`${BASE_URL}/${POLICY_ID}`)
+    return response.data
+  } catch (error) {
+    console.error('An error occurred while fetching data:', error)
+    return null
+  }
+}
 
 export const patchPolicy = async (nodes, edges) => {
-    const policyData = {
-      name: "nomeDaPolicy",
-      nodes: nodes,
-      edges: edges
-    };
-    try {
-      const response = await axios.patch('http://localhost:9000/policy/64fe4c4059f7f891749600c2', policyData);
-      
-      console.log('Resposta do servidor:', response.data);
-    } catch (error) {
-      console.log('Ocorreu um erro ao salvar a política:', error);
-    }
-  };
+  const policyData = {
+    name: 'PolicyName',
+    nodes: nodes,
+    edges: edges,
+  }
+  try {
+    const response = await axios.patch(`${BASE_URL}/${POLICY_ID}`, policyData)
+    return { success: true, data: response.data }
+  } catch (error) {
+    return { success: false, error: error }
+  }
+}
