@@ -1,5 +1,6 @@
 from dal.policy_dal import PolicyDal
 
+
 class PolicyService:
     def __init__(self, dal: PolicyDal):
         self.dal = dal

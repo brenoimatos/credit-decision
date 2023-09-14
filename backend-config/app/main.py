@@ -1,10 +1,11 @@
 import certifi
+import uvicorn
 from fastapi import FastAPI
 from motor.motor_asyncio import AsyncIOMotorClient
-import uvicorn
-from utils.settings import config
-from controllers.policy_controller import router as PolicyRouter
 from starlette.middleware.cors import CORSMiddleware
+
+from app.controllers.policy_controller import router as PolicyRouter
+from app.utils.settings import config
 
 app = FastAPI(title=config.PROJECT_NAME)
 
