@@ -1,6 +1,7 @@
 from typing import Optional
 
 import httpx
+from fastapi import HTTPException
 
 from app.utils.settings import config
 
@@ -16,5 +17,4 @@ class PolicyRemoteDal:
             policy_data = response.json()
             return policy_data
         except httpx.HTTPError as err:
-            print(f"An error occurred while fetching the policy: {err}")
-            return None
+            raise HTTPException(status_code=502, detail=f"An error occurred while fetching the policy: {err}")

@@ -21,6 +21,6 @@ async def test_execute_policy(client_test: httpx.AsyncClient, mock_get):
         "/execution/",
         json={"age": 25, "income": 800},
     )
-    
+
     assert response.status_code == 200
     assert {"decision": True} == response.json()

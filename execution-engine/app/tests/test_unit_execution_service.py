@@ -55,4 +55,3 @@ def test_decision_first_age_false_second_age_false(policy_service: ExecutionServ
         {"age": 17, "income": 3000}
     )
     assert decision is False
-

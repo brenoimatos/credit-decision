@@ -20,7 +20,3 @@ async def get_execution_service(
         policy_remote_dal: PolicyRemoteDal = Depends(get_policy_remote_dal)
 ) -> ExecutionService:
     yield ExecutionService(policy_remote_dal)
-
-
-
-
