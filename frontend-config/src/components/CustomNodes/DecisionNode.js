@@ -120,6 +120,7 @@ function DecisionNode({ id, data }) {
       updateNodeData(id, 'operator', operatorOptions[0].value, setNodes, store)
     }
   }, [id, setNodes, store, data])
+
   const isHandleRightConnected = data.edges.some(
     (edge) => edge.source === id && edge.sourceHandle === 'false'
   )

@@ -3,30 +3,32 @@ import { patchPolicy } from '../api/policy'
 
 const Sidebar = ({ nodes, edges }) => {
   const [isLoading, setIsLoading] = useState(false)
-  const [messageType, setMessageType] = useState('') // 'success' or 'error'
+  const [message, setMessage] = useState('')
+
+  const successMessage = 'Policy successfully saved!'
 
   useEffect(() => {
-    if (messageType) {
+    if (message) {
       const timer = setTimeout(() => {
-        setMessageType('')
-      }, 2000)
+        setMessage('')
+      }, 5000)
 
       return () => clearTimeout(timer)
     }
-  }, [messageType])
+  }, [message])
 
   const handleSave = async () => {
     setIsLoading(true)
     const result = await patchPolicy(nodes, edges)
 
-    setMessageType(result.success ? 'success' : 'error')
+    if (result.success) {
+      setMessage(successMessage)
+    } else {
+      setMessage(result.error)
+    }
+
     setIsLoading(false)
   }
-
-  const message =
-    messageType === 'success'
-      ? 'Policy successfully saved!'
-      : 'Error saving the policy.'
 
   const onDragStart = (event, nodeType) => {
     event.dataTransfer.setData('application/reactflow', nodeType)
@@ -73,12 +75,12 @@ const Sidebar = ({ nodes, edges }) => {
       >
         {isLoading ? 'Saving...' : 'Save Policy'}
       </button>
-      {messageType && (
+      {message && (
         <div
           style={{
             display: 'inline-block',
             padding: '10px',
-            backgroundColor: messageType === 'success' ? '#4CAF50' : '#f44336', // green or red
+            backgroundColor: message === successMessage ? '#4CAF50' : '#f44336', // green or red
             color: 'white',
             borderRadius: '5px',
             marginTop: '20px',

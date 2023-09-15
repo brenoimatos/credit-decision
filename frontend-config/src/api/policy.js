@@ -37,6 +37,10 @@ export const patchPolicy = async (nodes, edges) => {
     const response = await axios.patch(`${BASE_URL}/${POLICY_ID}`, policyData)
     return { success: true, data: response.data }
   } catch (error) {
-    return { success: false, error: error }
+    const errorMessage =
+      error.response && error.response.data && error.response.data.detail
+        ? error.response.data.detail
+        : 'An unknown error occurred'
+    return { success: false, error: errorMessage }
   }
 }
