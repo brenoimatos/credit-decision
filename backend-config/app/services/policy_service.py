@@ -1,4 +1,4 @@
-from dal.policy_dal import PolicyDal
+from app.dal.policy_dal import PolicyDal
 
 
 class PolicyService:

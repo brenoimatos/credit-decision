@@ -1,10 +1,12 @@
 from bson import ObjectId
 from motor.motor_asyncio import AsyncIOMotorDatabase
 
+from app.utils.settings import config
+
 
 class PolicyDal:
     def __init__(self, db: AsyncIOMotorDatabase):
-        self.collection = db["policies"]
+        self.collection = db[config.DB_COLLECTION]
 
     async def get_policy(self, id: str):
         return await self.collection.find_one({"_id": ObjectId(id)})

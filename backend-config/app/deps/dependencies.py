@@ -1,6 +1,7 @@
-from dal.policy_dal import PolicyDal
 from fastapi import Depends, Request
-from services.policy_service import PolicyService
+
+from app.dal.policy_dal import PolicyDal
+from app.services.policy_service import PolicyService
 
 
 def get_policy_dal(request: Request):

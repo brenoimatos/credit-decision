@@ -1,8 +1,9 @@
-from deps.dependencies import get_policy_service
 from fastapi import APIRouter, Body, Depends, HTTPException, status
 from fastapi.encoders import jsonable_encoder
-from models.policy_model import PolicyCreate, PolicyRead
-from services.policy_service import PolicyService
+
+from app.deps.dependencies import get_policy_service
+from app.models.policy_model import PolicyCreate, PolicyRead
+from app.services.policy_service import PolicyService
 
 router = APIRouter()
 
