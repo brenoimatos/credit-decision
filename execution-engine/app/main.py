@@ -1,8 +1,9 @@
-from fastapi import FastAPI
 import uvicorn
-from utils.settings import config
-from controllers.execution_controller import router as PolicyRouter
+from fastapi import FastAPI
 from starlette.middleware.cors import CORSMiddleware
+
+from app.controllers.execution_controller import router as PolicyRouter
+from app.utils.settings import config
 
 app = FastAPI(title=config.PROJECT_NAME)
 

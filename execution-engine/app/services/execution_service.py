@@ -1,6 +1,9 @@
 from typing import Dict, List, Union
+
 from fastapi import HTTPException
-from dal.policy_remote_dal import PolicyRemoteDal
+
+from app.dal.policy_remote_dal import PolicyRemoteDal
+
 
 class ExecutionService:
     def __init__(self, policy_remote_dal: PolicyRemoteDal):

@@ -1,6 +1,9 @@
 from typing import Optional
+
 import httpx
-from utils.settings import config
+
+from app.utils.settings import config
+
 
 class PolicyRemoteDal:
     def __init__(self, client: httpx.AsyncClient):
