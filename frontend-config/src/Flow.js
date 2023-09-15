@@ -46,8 +46,21 @@ const BasicFlow = () => {
   }, [])
 
   const onNodesChange = useCallback(
-    (changes) => setNodes((nds) => applyNodeChanges(changes, nds)),
-    []
+    (changes) => {
+      const updatedNodes = applyNodeChanges(changes, nodes)
+      setNodes(updatedNodes)
+      // This is needed for remove the edges when the associated node is removed.
+      const nodeIds = new Set(updatedNodes.map((n) => n.id))
+
+      const updatedEdges = edges.filter(
+        (edge) => nodeIds.has(edge.source) && nodeIds.has(edge.target)
+      )
+
+      if (updatedEdges.length !== edges.length) {
+        setEdges(updatedEdges)
+      }
+    },
+    [nodes, edges]
   )
 
   const onEdgesChange = useCallback(
@@ -92,7 +105,7 @@ const BasicFlow = () => {
     },
     [currentId, reactFlowInstance]
   )
-  // This is for to be able to update the True or False labels in decision node after connecting.
+  // This is needed to be able to update the True or False labels in decision node after connecting.
   const nodes_with_edges = nodes.map((node) => ({
     ...node,
     data: {
