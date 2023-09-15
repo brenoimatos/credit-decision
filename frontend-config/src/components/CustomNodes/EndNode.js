@@ -36,6 +36,13 @@ const EndNode = ({ id, data }) => {
     [id, setNodes, store]
   )
 
+  useEffect(() => {
+    if (selected === null || selected === undefined) {
+      setSelected(true)
+      updateNodeData(true)
+    }
+  }, [selected, updateNodeData])
+
   const handleChange = (evt) => {
     setSelected(evt.target.value)
     updateNodeData(evt.target.value)
