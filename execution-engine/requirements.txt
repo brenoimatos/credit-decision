@@ -1,9 +1,9 @@
-certifi==2023.7.22
-dnspython==2.4.2
+asgi-lifespan==2.1.0
 fastapi==0.103.1
 httpx==0.25.0
-motor==3.3.1
 pydantic==2.3.0
 pydantic-settings==2.0.3
 pydantic_core==2.6.3
+pytest==7.4.2
+pytest-asyncio==0.21.1
 uvicorn==0.23.2
