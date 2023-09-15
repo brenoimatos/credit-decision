@@ -3,11 +3,13 @@ from pydantic_settings import BaseSettings
 
 class Settings(BaseSettings):
     DEBUG_MODE: bool
-    HOST: str
+    HOST: str 
     PORT: int
-    DB_NAME: str
     DB_URL: str
-    PROJECT_NAME: str
+
+    DB_NAME: str = 'PolicyDB'
+    DB_COLLECTION: str = 'policies'
+    PROJECT_NAME: str = 'ConfigBackend'
 
 
 config = Settings()
