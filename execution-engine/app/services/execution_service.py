@@ -1,15 +1,10 @@
 from typing import Dict, List, Union
 from fastapi import HTTPException
-from dal.execution_dal import ExecutionDal
 from dal.policy_remote_dal import PolicyRemoteDal
 
 class ExecutionService:
-    def __init__(self, dal: ExecutionDal, policy_remote_dal: PolicyRemoteDal):
-        self.dal = dal
+    def __init__(self, policy_remote_dal: PolicyRemoteDal):
         self.policy_remote_dal = policy_remote_dal
-
-    async def get_execution(self, id: str):
-        return await self.dal.get_execution(id)
     
     async def execute_engine(self, policy_id: str, customer_payload: dict) -> dict:
         policy = await self.policy_remote_dal.get_policy(policy_id)
