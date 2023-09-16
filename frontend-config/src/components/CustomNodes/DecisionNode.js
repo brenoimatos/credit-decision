@@ -78,7 +78,13 @@ function InnerSelect({ value, nodeId, options, fieldName }) {
   }
 
   return (
-    <select className="nodrag" onChange={onChange} value={value}>
+    <select
+      className="nodrag"
+      onChange={onChange}
+      value={value}
+      data-testid={`${fieldName}-select`}
+    >
+      {' '}
       {options.map((option) => (
         <option key={option.value} value={option.value}>
           {option.label}
@@ -143,12 +149,14 @@ function DecisionNode({ id, data }) {
           nodeId={id}
           options={attributeOptions}
           fieldName="attribute"
+          data-testid="attribute-select"
         />
         <InnerSelect
           value={data.operator}
           nodeId={id}
           options={operatorOptions}
           fieldName="operator"
+          data-testid="operator-select"
         />
         <input
           type="number"
@@ -157,6 +165,7 @@ function DecisionNode({ id, data }) {
           className="nodrag"
           style={inputStyle}
           placeholder="Value"
+          data-testid="input-value"
         />
       </div>
       <Handle

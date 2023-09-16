@@ -36,7 +36,7 @@ const Sidebar = ({ nodes, edges }) => {
   }
 
   return (
-    <aside>
+    <aside data-testid="sidebar">
       <div className="description">
         You can drag these nodes to the pane on the right.
       </div>
@@ -61,36 +61,45 @@ const Sidebar = ({ nodes, edges }) => {
       >
         End Node
       </div>
-      <button
-        onClick={handleSave}
-        disabled={isLoading}
+      <div
         style={{
-          backgroundColor: isLoading ? 'grey' : 'blue',
-          color: 'white',
-          padding: '10px 20px',
-          borderRadius: '5px',
-          cursor: 'pointer',
-          marginTop: '10px',
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
         }}
       >
-        {isLoading ? 'Saving...' : 'Save Policy'}
-      </button>
-      {message && (
-        <div
+        <button
+          onClick={handleSave}
+          disabled={isLoading}
           style={{
-            display: 'inline-block',
-            padding: '10px',
-            backgroundColor: message === successMessage ? '#4CAF50' : '#f44336', // green or red
+            backgroundColor: isLoading ? 'grey' : 'blue',
             color: 'white',
+            padding: '10px 20px',
             borderRadius: '5px',
-            marginTop: '20px',
-            textAlign: 'center',
-            maxWidth: '50%',
+            cursor: 'pointer',
+            marginTop: '10px',
+            width: '50%',
           }}
         >
-          {message}
-        </div>
-      )}
+          {isLoading ? 'Saving...' : 'Save Policy'}
+        </button>
+        {message && (
+          <div
+            style={{
+              padding: '10px',
+              backgroundColor:
+                message === successMessage ? '#4CAF50' : '#f44336', // green or red
+              color: 'white',
+              borderRadius: '5px',
+              marginTop: '20px',
+              textAlign: 'center',
+              maxWidth: '50%',
+            }}
+          >
+            {message}
+          </div>
+        )}
+      </div>
     </aside>
   )
 }

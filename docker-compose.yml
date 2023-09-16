@@ -1,0 +1,27 @@
+version: '3'
+services:
+  backend-config:
+    build: ./backend-config/
+    ports:
+      - "9000:9000"
+    env_file:
+      - ./backend-config/.env
+    environment:
+      - HOST=0.0.0.0
+
+  execution-engine:
+    build: ./execution-engine/
+    ports:
+      - "8000:8000"
+    environment:
+      - POLICY_API=http://backend-config:9000/policy
+      - HOST=0.0.0.0
+    env_file:
+      - ./execution-engine/.env
+
+  frontend-config:
+    build: ./frontend-config/
+    ports:
+      - "3000:3000"
+    env_file:
+      - ./frontend-config/.env
