@@ -20,10 +20,13 @@ export const createPolicy = async (nodes, edges) => {
 export const getPolicy = async () => {
   try {
     const response = await axios.get(`${BASE_URL}/${POLICY_ID}`)
-    return response.data
+    return { success: true, data: response.data }
   } catch (error) {
-    console.error('An error occurred while fetching data:', error)
-    return null
+    const errorMessage =
+      error.response && error.response.data && error.response.data.detail
+        ? error.response.data.detail
+        : 'Error: Failed to fetch policy'
+    return { success: false, error: errorMessage }
   }
 }
 
@@ -40,7 +43,7 @@ export const patchPolicy = async (nodes, edges) => {
     const errorMessage =
       error.response && error.response.data && error.response.data.detail
         ? error.response.data.detail
-        : 'An unknown error occurred'
+        : 'Error: Failed to save policy.'
     return { success: false, error: errorMessage }
   }
 }

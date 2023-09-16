@@ -18,7 +18,7 @@ const nodeTypes = {
   end: EndNode,
 }
 
-const BasicFlow = () => {
+const Flow = () => {
   const reactFlowWrapper = useRef(null)
   const [nodes, setNodes] = useState([])
   const [edges, setEdges] = useState([])
@@ -27,17 +27,18 @@ const BasicFlow = () => {
   const [message, setMessage] = useState(null)
 
   const fetchPolicyData = async () => {
-    const policyData = await getPolicy()
-    if (policyData) {
-      setNodes(policyData.nodes)
-      setEdges(policyData.edges)
+    const result = await getPolicy()
+    if (result.success) {
+      const data = result.data
+      setNodes(data.nodes)
+      setEdges(data.edges)
       const maxId = Math.max(
-        ...policyData.nodes.map((node) => parseInt(node.id.split('_')[1], 10)),
+        ...data.nodes.map((node) => parseInt(node.id.split('_')[1], 10)),
         0
       )
       setCurrentId(maxId + 1)
     } else {
-      setMessage('Failed to fetch policy')
+      setMessage(result.error)
     }
   }
 
@@ -151,4 +152,4 @@ const BasicFlow = () => {
   )
 }
 
-export default BasicFlow
+export default Flow

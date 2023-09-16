@@ -7,31 +7,27 @@ export const attributeOptions = [
     value: 'income',
     label: 'Income',
   },
-];
+]
 
 export const operatorOptions = [
-{
-  value: '=',
-  label: '=',
-},
-{
-  value: '!=',
-  label: '!=',
-},
-{
-  value: '>',
-  label: '>',
-},
-{
-  value: '>=',
-  label: '>=',
-},
-{
-  value: '<',
-  label: '<',
-},
-{
-  value: '<=',
-  label: '<=',
-},
-];
+  {
+    value: '=',
+    label: '=',
+  },
+  {
+    value: '>',
+    label: '>',
+  },
+  {
+    value: '>=',
+    label: '>=',
+  },
+  {
+    value: '<',
+    label: '<',
+  },
+  {
+    value: '<=',
+    label: '<=',
+  },
+]
