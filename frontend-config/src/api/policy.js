@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-const BASE_URL = 'http://localhost:9000/policy'
+const BASE_URL = process.env.REACT_APP_POLICY_API
 const POLICY_ID = '64fe4c4059f7f891749600c2'
 
 export const createPolicy = async (nodes, edges) => {
