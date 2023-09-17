@@ -1,4 +1,22 @@
 # Credit Decision Engine
+## Table of Contents
+
+1. [Introduction](#introduction)
+2. [How It Works](#how-it-works)
+     - [Example Flow](#example-flow)
+3. [Tech Stack and Decisions](#tech-stack-and-decisions)
+    - [Python](#python)
+    - [FastAPI](#fastapi-configbackend-and-executionengine)
+    - [React](#react-configfrontend)
+    - [MongoDB](#mongodb-policydb)
+    - [Docker](#docker)
+4. [Getting Started](#getting-started)
+5. [Testing](#testing)
+6. [Code Structure](#code-structure)
+7. [Future Enhancements](#future-enhancements)
+   - [Backend Improvements](#backend-improvements)
+   - [Frontend Improvements](#frontend-improvements)
+   - [Local MongoDB Management](#local-mongodb-management)
 
 ## Introduction
 
@@ -33,7 +51,7 @@ And the output from the ExecutionEngine will be:
 
 This project aims to satisfy a range of functional and non-functional requirements, which are detailed further in this document.
 
-## How Does It Work
+## How It Works
 
 The Decision Engine operates by interconnecting four main components, each with its specific role in the decision-making process.
 
@@ -97,7 +115,7 @@ The policy update from ConfigFrontend to ExecutionEngine takes effect in less th
 }
 ```
 
-## Tech Stack
+## Tech Stack and Decisions
 
 This project leverages various technologies, each carefully chosen to meet specific requirements and functionalities.
 
@@ -158,10 +176,6 @@ Docker was integrated into this project not as a strict requirement, but as a me
 
 This section provides a quick start guide on how to get the project up and running on your local machine.
 
-### Project Structure
-
-Here is a simplified structure of the project to help you understand its organization:
-
 
 ### Environment Variables
 
@@ -176,11 +190,13 @@ Here is a simplified structure of the project to help you understand its organiz
 3. The only incomplete variable in the `.env.example` file is `DB_URL`. You'll need to set up a MongoDB instance on Atlas and use the connection URL to populate this field. **Alternatively, you can reach out to me for a test database URL.**
 
 ### Setting up MongoDB
+> **Disclaimer**: The setup described here is not optimized for ease of use. The best option would be to use the test database URL provided upon request. If you opt to proceed with the following steps, you will need to create a policy and manually update its ID in the project's configuration. These limitations are acknowledged, and potential improvements are discussed in the [Local MongoDB Management](#local-mongodb-management) section.
 
 1. Go to [MongoDB Atlas](https://www.mongodb.com/cloud/atlas) and create an account if you don't have one.
 2. Create a new cluster and retrieve the connection URL.
 3. Create a database called `PolicyDB` and a collection called `policies`
-3. Replace the `DB_URL` in the `.env` files with the URL you've just obtained.
+4. Replace the `DB_URL` in the `.env` files with the URL you've just obtained.
+5. This alternative is not yet optimized, 
 
 ### Running the Project using Docker
 
@@ -193,3 +209,132 @@ Here is a simplified structure of the project to help you understand its organiz
     ```
 
 4. Once the services are up and running, you can access the frontend at `http://localhost:3000` (this is the `PORT` port number defined in the `.env` file for the frontend-config service).
+
+## Testing
+
+This section provides instructions on how to run tests for each component of the project inside their respective Docker containers. This ensures consistency in the testing environment.
+
+### Run Tests in Docker Containers
+
+#### Find the Container Name
+
+To find the container name for each service, you can run the following command.
+
+```bash
+docker-compose ps
+```
+
+Look for the column that says 'Name' and copy the name of the container corresponding to the service you want to test.
+
+### Running Tests for Backend-Config
+
+Backend-Config uses Python's `pytest` for testing. Here are the types of tests you might encounter:
+
+1. HTTP Endpoint integration tests: These tests use an async HTTP client to perform GET and PATCH requests.
+2. Service unit tests: These tests check the logic of services within the backend.
+
+To run tests for `backend-config` service in a single command, if you did't change the container name, execute:
+
+```bash
+docker exec -it credit-decision-backend-config-1 /bin/sh -c "cd app && pytest"
+```
+
+### Running Tests for Execution-Engine
+
+Execution-Engine also uses `pytest` along with `pytest-asyncio` for asynchronous tests. The types of tests are similar to Backend-Config but may include mocking external HTTP calls.
+
+For the `execution-engine` service, you can run the tests in a single command as follows:
+
+```bash
+docker exec -it credit-decision-execution-engine-1 /bin/sh -c "cd app && pytest"
+```
+
+### Running Tests for Frontend-Config
+
+Frontend-Config uses Jest for its testing framework. The tests cover UI components like nodes and also interaction with APIs. To run, you can execute tests using Jest in one step with:
+
+```bash
+docker exec -it credit-decision-frontend-config-1 /bin/sh -c "cd app && npm test"
+```
+
+
+This will run all the available tests and provide an output for each one, showing if they have passed or failed.
+
+## Code Structure
+
+### Backend-Config
+
+- `app/controllers`: Contains the policy controller responsible for handling API routes related to policies.
+- `app/dal`: Data Access Layer for the policy, communicates directly with the MongoDB database.
+- `app/deps`: Contains dependencies used across the application.
+- `app/models`: Houses the data models for policies.
+- `app/services`: Contains the logic for policy services.
+- `app/tests`: Contains both unit and integration tests for the backend-config.
+- `app/utils`: Houses settings and utility functions.
+- `app/main.py`: Main entry point for the FastAPI application.
+
+### Execution-Engine
+
+- `app/controllers`: Contains the execution controller responsible for decision execution.
+- `app/dal`: Data Access Layer that communicates with the backend-config to fetch policies.
+- `app/deps`: Contains dependencies used across the application.
+- `app/models`: Houses the data models for customer information.
+- `app/services`: Contains the logic for execution services.
+- `app/tests`: Contains both unit and integration tests for the execution-engine.
+- `app/utils`: Houses settings and utility functions.
+- `app/main.py`: Main entry point for the FastAPI application.
+
+### Frontend-Config
+
+- `src/api`: Contains API calls related to policies.
+- `src/components`: Houses the React components including custom nodes and sidebar.
+- `src/utils`: Contains utility constants.
+- `src/App.js`: Main React component for the application.
+- `src/Flow.js`: Contains the main logic for the flow chart.
+- `src/index.js`: Entry point for the React application.
+
+## Future Enhancements
+
+The following sections outline potential enhancements for the Decision Engine. These are suggestions that could make the system more versatile, secure, and user-friendly.
+
+### Backend Improvements
+
+#### Authentication System
+Implementing an authentication system could add an extra layer of security, limiting unauthorized access to decision-making policies.
+
+#### Support for Multiple Policies
+Currently, the system is designed to support a single, hardcoded policy. Future adaptations could allow for the creation and management of multiple policies.
+
+#### Flexible Decision Nodes
+The current attributes available for decision nodes are limited to 'Age' and 'Income'. Enabling users to add custom attributes would make the system more flexible. These attributes could be saved and fetched directly from the backend.
+
+#### Policy Execution History
+Creating a separate database to track the history of executed policies could improve system accountability. This would allow for better auditing of decisions by capturing the payload, the policy applied, and the resulting decision.
+
+#### Execution Engine Optimization
+Instead of transforming node structures into decision trees each time a decision is made, these trees could be pre-computed and stored in the ConfigBackend. This would reduce computational overhead in the Execution Engine.
+
+### Frontend Improvements
+
+#### Design Overhaul
+Improving the UI with a more modern, aesthetic, and professional design can offer a more engaging user experience. 
+
+#### Easier Node Connections
+An intuitive system could be developed to allow nodes to connect by being dragged close to each other, removing the need to manually draw edges between them.
+
+#### Undo Functionality
+Introducing 'Undo' functionality, accessible via `Ctrl+Z`, would allow users to easily reverse any mistakes or changes.
+
+#### Batch Node Operations
+The interface could permit users to select multiple nodes for batch deletion or other operations, making the UI more convenient to use.
+
+### Local MongoDB Management
+
+#### Simplified Setup
+A locally-managed MongoDB could make the initial setup more straightforward, negating the need to share a `DB_URL`.
+
+#### Dynamic Collection Creation
+A new MongoDB collection could be automatically created the first time the system is run, eliminating manual setup.
+
+#### Dynamic Policy ID Retrieval
+Instead of hardcoded IDs, the system could dynamically fetch the latest or specified ID, offering greater flexibility in managing policy configurations.
