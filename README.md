@@ -32,6 +32,8 @@ The architecture comprises four key components:
   
 4. **PolicyDB**: A MongoDB database that stores the policy configurations.
 
+
+
 The decision policies can operate on arbitrary variables passed in a JSON format, making it highly adaptable and versatile. For example, a typical input may look like:
 
 ```json
@@ -71,35 +73,35 @@ This MongoDB database stores the user-defined policy configurations. The data mo
 
 When a request is received from a client system (CustomerBackend), the ExecutionEngine fetches the current policy from PolicyDB. It then executes this policy using the input variables supplied in the JSON payload. After the decision-making process is complete, it returns a JSON object with a boolean `decision` field.
 
-The policy update from ConfigFrontend to ExecutionEngine takes effect in less than 10 seconds, ensuring a seamless experience for the end-users.
+![System Design](./assets/system-design.jpg)
 
 ### Example Flow
 
 #### Step 1: Policy Creation/Update in ConfigFrontend
 
-1. **Access ConfigFrontend**: A user logs into the frontend interface to design or update a decision-making policy.
-   
+1. **Access ConfigFrontend**: A user logs access frontend interface to design or update a decision-making policy.
+![Frontend](./assets/frontend.jpg)
 2. **Drag and Drop Nodes**: The user drags 'Decision Nodes' and 'End Nodes' onto the canvas.
 
     - **Decision Nodes**: These have three configurables:
-        1. Attribute Dropdown: Users select an attribute like 'Age' or 'Income'.
-        2. Operator Dropdown: Users select an operator like '>', '<=', etc.
-        3. Value Input: Users input a numerical value for comparison.
+        1. `Attribute Dropdown`: Users select an attribute like 'Age' or 'Income'.
+        2. `Operator Dropdown`: Users select an operator like '>', '<=', etc.
+        3. `Value Input`: Users input a numerical value for comparison.
 
     - **End Nodes**: These have a single configurable dropdown to select either 'True' or 'False' as the decision outcome.
    
-3. **Connect Nodes**: Users can then connect the 'Decision Nodes' and 'End Nodes' using edges. Each 'Decision Node' has two outs: 'True' and 'False'. Users link these outs to the next node in the flowchart, determining the decision path.
+3. **Connect Nodes**: Users can then connect the `Decision Nodes` and `End Nodes` using edges. Each `Decision Node` has two outs: `True` and `False`. Users link these outs to the next node in the flowchart, determining the decision path.
 
 4. **Save Policy**: After completing the design, the user hits the 'Save' button. The frontend performs validation to ensure all nodes are properly connected and configured. Upon successful validation, it patches the existing policy via a call to ConfigBackend, which then stores the updated policy in PolicyDB.
 
 #### Step 2: Policy Execution
 
-1. **CustomerBackend Request**: A JSON object with arbitrary fields is sent to the ExecutionEngine.
-
+1. **CustomerBackend Request**: A JSON object with arbitrary fields is sent to the ExecutionEngine. <br>It can be accessed at `http://localhost:8000/docs/` to use the FastAPI UI to run the execution.
+![Execution Engine](./assets/execution-engine.jpg)
 ```json
 {
-  "age": 30,
-  "income": 4500
+  "age": 21,
+  "income": 4000
 }
 ```
 
@@ -328,6 +330,12 @@ Introducing 'Undo' functionality, accessible via `Ctrl+Z`, would allow users to 
 #### Batch Node Operations
 The interface could permit users to select multiple nodes for batch deletion or other operations, making the UI more convenient to use.
 
+#### Dynamic End Node Coloring
+Implementing dynamic coloring for the End Node based on its `true` or `false` state could provide immediate, visual feedback to the user. This helps in quickly understanding the outcome of a decision path.
+
+#### Auto-Layout Option
+For larger policies that include multiple nodes, an auto-layout feature could automatically arrange all the nodes in an organized manner. This makes it easier to visualize the entire decision-making process and could be toggled on or off as needed.
+
 ### Local MongoDB Management
 
 #### Simplified Setup
@@ -338,3 +346,4 @@ A new MongoDB collection could be automatically created the first time the syste
 
 #### Dynamic Policy ID Retrieval
 Instead of hardcoded IDs, the system could dynamically fetch the latest or specified ID, offering greater flexibility in managing policy configurations.
+
