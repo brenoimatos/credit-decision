@@ -8,6 +8,7 @@ services:
       - ./backend-config/.env
     environment:
       - HOST=0.0.0.0
+      - PYTHONPATH=/app_root # For pytest discovery of modules, same as WORKDIR 
 
   execution-engine:
     build: ./execution-engine/
@@ -16,6 +17,7 @@ services:
     environment:
       - POLICY_API=http://backend-config:9000/policy
       - HOST=0.0.0.0
+      - PYTHONPATH=/app_root # For pytest discovery of modules, same as WORKDIR 
     env_file:
       - ./execution-engine/.env
 
