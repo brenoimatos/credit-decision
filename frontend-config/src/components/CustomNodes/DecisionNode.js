@@ -11,7 +11,7 @@ const decisionStyle = {
   width: 80,
   height: 80,
   transform: 'translate(-50%, -50%) rotate(45deg)',
-  background: '#eefc5e',
+  background: '#EDEDED',
   position: 'absolute',
   left: '50%',
   top: '50%',
@@ -39,6 +39,9 @@ const inputStyle = {
   width: '60px',
   height: '10px',
   textAlign: 'center',
+  border: 'none',
+  outline: 'none',
+  backgroundColor: 'rgba(255, 255, 255, 0.75)',
 }
 
 const labelStyle = {
@@ -73,6 +76,12 @@ function InnerSelect({ value, nodeId, options, fieldName }) {
   const { setNodes } = useReactFlow()
   const store = useStoreApi()
 
+  const dropdownStyle = {
+    border: 'none',
+    outline: 'none',
+    backgroundColor: 'rgba(255, 255, 255, 0.45)',
+  }
+
   const onChange = (evt) => {
     updateNodeData(nodeId, fieldName, evt.target.value, setNodes, store)
   }
@@ -83,8 +92,8 @@ function InnerSelect({ value, nodeId, options, fieldName }) {
       onChange={onChange}
       value={value}
       data-testid={`${fieldName}-select`}
+      style={dropdownStyle}
     >
-      {' '}
       {options.map((option) => (
         <option key={option.value} value={option.value}>
           {option.label}

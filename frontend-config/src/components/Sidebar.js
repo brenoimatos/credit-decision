@@ -38,7 +38,8 @@ const Sidebar = ({ nodes, edges }) => {
   return (
     <aside data-testid="sidebar">
       <div className="description">
-        You can drag these nodes to the pane on the right.
+        <div className="part-one">Drag nodes to create a flowchart for a Credit Policy.</div>
+        <div className="part-two">Each path needs an end node and all nodes must be connected.</div>
       </div>
       <div
         className="dndnode start"

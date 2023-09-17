@@ -13,6 +13,11 @@ const ovalStyle = {
   border: '1px solid #333',
 }
 
+const selectStyle = {
+  backgroundColor: 'rgba(255, 255, 255, 0.55)',
+  border: 'none',
+}
+
 const EndNode = ({ id, data }) => {
   const { setNodes } = useReactFlow()
   const store = useStoreApi()
@@ -57,7 +62,7 @@ const EndNode = ({ id, data }) => {
       <Handle id="a" type="target" position={Position.Top} />
       <Handle id="b" type="target" position={Position.Left} />
       End
-      <select onChange={handleChange} value={selected}>
+      <select onChange={handleChange} value={selected} style={selectStyle}>
         <option value={true}>True</option>
         <option value={false}>False</option>
       </select>

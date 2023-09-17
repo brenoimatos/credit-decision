@@ -14,7 +14,7 @@ describe('Sidebar Component', () => {
   it('renders correctly', () => {
     render(<Sidebar nodes={[]} edges={[]} />)
     expect(
-      screen.getByText('You can drag these nodes to the pane on the right.')
+      screen.getByText('Drag nodes to create a flowchart for a Credit Policy.')
     ).toBeInTheDocument()
   })
 

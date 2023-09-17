@@ -51,7 +51,7 @@ code {
 }
 
 .dndflow .dndnode.decision {
-  background-color: #eefc5e;
+  background-color: #ededed;
 }
 
 .dndflow .reactflow-wrapper {
@@ -86,4 +86,21 @@ code {
   background: radial-gradient(circle, #ff0, #f06);
   width: 20px !important;
   height: 20px !important;
+}
+
+.description {
+  font-size: 16px;
+  text-align: center;
+  margin: 5px;
+}
+
+.description .part-one {
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.description .part-two {
+  
+  font-size: 13px;
+  color: #555;
 }
