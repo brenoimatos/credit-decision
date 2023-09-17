@@ -51,7 +51,6 @@ And the output from the ExecutionEngine will be:
 }
 ```
 
-This project aims to satisfy a range of functional and non-functional requirements, which are detailed further in this document.
 
 ## How It Works
 
@@ -67,7 +66,7 @@ Once the user saves a policy on the frontend, the ConfigBackend stores this conf
 
 ### PolicyDB
 
-This MongoDB database stores the user-defined policy configurations. The data model is structured to hold the policy logic as well as any meta-information required for execution.
+This MongoDB database stores the nodes-structured policy configurations. The data model is structured to hold the policy logic as well as any meta-information required for execution.
 
 ### ExecutionEngine
 
@@ -79,16 +78,16 @@ When a request is received from a client system (CustomerBackend), the Execution
 
 #### Step 1: Policy Creation/Update in ConfigFrontend
 
-1. **Access ConfigFrontend**: A user logs access frontend interface to design or update a decision-making policy.
+1. **Access ConfigFrontend**: A user accesses the frontend interface to design or update a decision-making policy.
 ![Frontend](./assets/frontend.jpg)
-2. **Drag and Drop Nodes**: The user drags 'Decision Nodes' and 'End Nodes' onto the canvas.
+2. **Drag and Drop Nodes**: The user drags `Decision Nodes` and `End Nodes` onto the canvas.
 
     - **Decision Nodes**: These have three configurables:
         1. `Attribute Dropdown`: Users select an attribute like 'Age' or 'Income'.
         2. `Operator Dropdown`: Users select an operator like '>', '<=', etc.
         3. `Value Input`: Users input a numerical value for comparison.
 
-    - **End Nodes**: These have a single configurable dropdown to select either 'True' or 'False' as the decision outcome.
+    - **End Nodes**: These have a single configurable dropdown to select either `True` or `False` as the decision outcome.
    
 3. **Connect Nodes**: Users can then connect the `Decision Nodes` and `End Nodes` using edges. Each `Decision Node` has two outs: `True` and `False`. Users link these outs to the next node in the flowchart, determining the decision path.
 
@@ -97,7 +96,7 @@ When a request is received from a client system (CustomerBackend), the Execution
 #### Step 2: Policy Execution
 
 1. **CustomerBackend Request**: A JSON object with arbitrary fields is sent to the ExecutionEngine. <br>It can be accessed at `http://localhost:8000/docs/` to use the FastAPI UI to run the execution.
-![Execution Engine](./assets/execution-engine.jpg)
+![Execution Engine](./assets/execution-engine-docs.jpg)
 ```json
 {
   "age": 21,
@@ -105,7 +104,34 @@ When a request is received from a client system (CustomerBackend), the Execution
 }
 ```
 
-2. **Fetch and Transform Policy**: ExecutionEngine makes a call to ConfigBackend to fetch the latest policy. It then transforms the nodes structure into a decision tree.
+2. **Fetch and Transform Policy**: ExecutionEngine makes a call to ConfigBackend to fetch the latest policy. It then transforms the nodes structure into a decision tree. <br> An example of decision tree would be:
+```json
+{
+    "attribute": "age",
+    "operator": ">=",
+    "value": "25",
+    "true": {
+        "attribute": "income",
+        "operator": ">=",
+        "value": "600",
+        "true": True,
+        "false": False
+    },
+    "false": {
+        "attribute": "age",
+        "operator": ">=",
+        "value": "18",
+        "true": {
+            "attribute": "income",
+            "operator": ">=",
+            "value": "2500",
+            "true": True,
+            "false": False
+        },
+        "false": False
+    }
+}
+```
 
 3. **Policy Evaluation**: The decision tree is evaluated using the input variables from the CustomerBackend's JSON payload.
 
@@ -198,7 +224,7 @@ This section provides a quick start guide on how to get the project up and runni
 2. Create a new cluster and retrieve the connection URL.
 3. Create a database called `PolicyDB` and a collection called `policies`
 4. Replace the `DB_URL` in the `.env` files with the URL you've just obtained.
-5. This alternative is not yet optimized, 
+5. Create a random entry in collections with the policy_id set in the project, just to be able to patch using the frontend later.
 
 ### Running the Project using Docker
 
@@ -210,7 +236,7 @@ This section provides a quick start guide on how to get the project up and runni
     docker-compose up
     ```
 
-4. Once the services are up and running, you can access the frontend at `http://localhost:3000` (this is the `PORT` port number defined in the `.env` file for the frontend-config service).
+4. Once the services are up and running, you can access the frontend at `http://localhost:3000` (this is the `PORT` defined in the `.env` file for the frontend-config service).
 
 ## Testing
 
@@ -235,7 +261,7 @@ Backend-Config uses Python's `pytest` for testing. Here are the types of tests y
 1. HTTP Endpoint integration tests: These tests use an async HTTP client to perform GET and PATCH requests.
 2. Service unit tests: These tests check the logic of services within the backend.
 
-To run tests for `backend-config` service in a single command, if you did't change the container name, execute:
+To run tests for `backend-config` service in a single command, if the container name is the default one, execute:
 
 ```bash
 docker exec -it credit-decision-backend-config-1 /bin/sh -c "cd app && pytest"
