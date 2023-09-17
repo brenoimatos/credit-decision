@@ -256,7 +256,7 @@ docker exec -it credit-decision-execution-engine-1 /bin/sh -c "cd app && pytest"
 Frontend-Config uses Jest for its testing framework. The tests cover UI components like nodes and also interaction with APIs. To run, you can execute tests using Jest in one step with:
 
 ```bash
-docker exec -it credit-decision-frontend-config-1 /bin/sh -c "cd app && npm test"
+docker exec -it credit-decision-frontend-config-1 /bin/sh -c "npm test"
 ```
 
 
