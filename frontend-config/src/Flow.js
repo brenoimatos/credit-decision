@@ -107,7 +107,7 @@ const Flow = () => {
     [currentId, reactFlowInstance]
   )
   // This is needed to be able to update the True or False labels in decision node after connecting.
-  const nodes_with_edges = nodes.map((node) => ({
+  const nodesWithEdges = nodes.map((node) => ({
     ...node,
     data: {
       ...node.data,
@@ -135,7 +135,7 @@ const Flow = () => {
             </div>
           )}
           <ReactFlow
-            nodes={nodes_with_edges}
+            nodes={nodesWithEdges}
             edges={edges}
             onNodesChange={onNodesChange}
             onEdgesChange={onEdgesChange}
